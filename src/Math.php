@@ -8,25 +8,23 @@ final class Math
 {
     private const SCALE = 10;
 
-    public float $number = 0;
-
-    public function sum(float $value): void
+    public static function sum(float $a, float $b): float
     {
-        $this->number = (float) bcadd((string) $this->number, (string) $value, self::SCALE);
+        return (float) bcadd((string) $a, (string) $b, self::SCALE);
     }
 
-    public function subtract(float $value): void
+    public static function subtract(float $a, float $b): float
     {
-        $this->number = (float) bcsub((string) $this->number, (string) $value, self::SCALE);
+        return (float) bcsub((string) $a, (string) $b, self::SCALE);
     }
 
-    public function multiply(float $value): void
+    public static function multiply(float $a, float $b): float
     {
-        $this->number = (float) bcmul((string) $this->number, (string) $value, self::SCALE);
+        return (float) bcmul((string) $a, (string) $b, self::SCALE);
     }
 
-    public function divide(float $value): void
+    public static function divide(float $a, float $b): float
     {
-        $this->number = (float) bcdiv((string) $this->number, (string) $value, self::SCALE);
+        return (float) bcdiv((string) $a, (string) $b, self::SCALE);
     }
 }

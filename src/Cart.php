@@ -16,15 +16,12 @@ final class Cart
 
     public function getProductCartPrices(): float
     {
-        $math = new Math();
+        $productsTotal = 0.0;
         foreach ($this->products as $product) {
-            $math->sum($product->price);
+            $productsTotal = Math::sum($productsTotal, $product->price);
         }
 
-        $productsTotal = $math->number;
-        $math->sum($this->getShippingCost($productsTotal));
-
-        return $math->number;
+        return Math::sum($productsTotal, $this->getShippingCost($productsTotal));
     }
 
     private function getShippingCost(float $productsTotal): float
