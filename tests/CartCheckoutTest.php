@@ -8,33 +8,35 @@ use Conveycode\PhpunitExercice\Cart;
 use Conveycode\PhpunitExercice\PaymentGateway;
 use Conveycode\PhpunitExercice\Product;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 final class CartCheckoutTest extends TestCase
 {
+    use ProphecyTrait;
+
     public function testCheckoutChargesGatewayWithCartTotal(): void
     {
-        $gateway = $this->createMock(PaymentGateway::class);
-        $gateway
-            ->expects($this->once())
-            ->method('charge')
-            ->with(50.0)
-            ->willReturn('tx-123');
+        $gateway = $this->prophesize(PaymentGateway::class);
+        $gateway->charge(Argument::any())->willReturn('tx-123');
 
         $cart = new Cart([
             new Product('a', 30),
             new Product('b', 20),
         ]);
 
-        $cart->checkout($gateway);
+        $cart->checkout($gateway->reveal());
+
+        $gateway->charge(50.0)->shouldHaveBeenCalled();
     }
 
     public function testCheckoutReturnsTransactionIdFromGateway(): void
     {
-        $gateway = $this->createMock(PaymentGateway::class);
-        $gateway->method('charge')->willReturn('tx-abc');
+        $gateway = $this->prophesize(PaymentGateway::class);
+        $gateway->charge(Argument::any())->willReturn('tx-abc');
         $cart = new Cart([new Product('a', 10)]);
 
-        $transactionId = $cart->checkout($gateway);
+        $transactionId = $cart->checkout($gateway->reveal());
 
         self::assertSame('tx-abc', $transactionId);
     }

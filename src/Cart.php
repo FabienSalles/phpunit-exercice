@@ -18,7 +18,7 @@ final class Cart
     {
         $total = 0.0;
         foreach ($this->products as $product) {
-            $total += $product->price;
+            $total = Math::sum($total, $product->price);
         }
 
         return $total;
